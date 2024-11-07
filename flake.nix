@@ -46,24 +46,19 @@
             };
             modules = [
               # > Our main nixos configuration file <
-              # inputs.home-manager.nixosModule
-              # inputs.darkmatter.nixosModule
-              inputs.home-manager.nixosModule
               ./hosts/t480/configuration.nix
-	    
+              home-manager.nixosModules.home-manager
+	      {
+	        #home-manager.useGlobalPkgs = true;
+		#home-manager.useUserPackages = true;
+
+		home-manager.users.m = import ./home/m/home.nix;
+	      }
+	      # ./home-manager/mark/home.nix 
             ];
           };
       };
-      home-manager = home-manager.packages.${nixpkgs.system}."home-manager";
-      homeConfigurations = {
-        m = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = { inherit inputs outputs self; };
-          modules = [
-            ./home/mark/home.nix
-          ];
-        };
-      };
+      # home-manager = home-manager.packages.${nixpkgs.system}."home-manager";
 
       nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
     };
